@@ -1,0 +1,216 @@
+/* *{
+    margin: 1px;
+    padding: 0;
+}
+
+
+.container{
+    display:flex;
+    flex-direction: column;
+    width:100%;
+    align-self: center;
+}
+image class
+.png{
+ height: auto;
+ width:720px;
+ align-self: center;
+}
+
+.png2{
+    margin-top: 50px;
+    margin-left: 31%; 
+    align-self: flex-start;
+}
+ @page 
+    {
+        size: auto;   auto is the initial value  */
+        /* margin: 0mm;  this affects the margin in the printer settings
+    } 
+1st page div class
+.m-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width:100%;
+    /* width: 3508px;
+    height: 2480px ; */
+    /* position: absolute;
+    z-index: 1;
+    background-color: #ffffff;
+    -webkit-user-select: none;
+}
+.para{
+    width:720px;
+    
+}
+.onet{
+    width:720px;
+} */
+/* .table1{
+
+} */
+/* table {
+    border-collapse: collapse;
+
+}
+td{
+    border:1px solid black;
+    padding: 5px;
+}
+.t-heading{
+    background-color:lightgrey;
+    font-weight: bold;
+}
+li strong {
+    margin:  100px 0px;
+} */
+*{
+    /* margin: 1px; */
+    padding: 0;
+}
+
+
+.container{
+    display:flex;
+    flex-direction: column;
+    width:100%;
+    /* align-self: center; */
+}
+/* image class */
+.png{
+ height: auto;
+ width:720px;
+ align-self: center;
+}
+
+.png2{
+    margin-top: 50px;
+
+    align-self: flex-start;
+}
+.png3{
+    height: auto;
+    width:720px;
+    align-self: center;
+   }
+   
+@page 
+{
+    size:  auto;   /* auto is the initial value */
+    margin: 0mm;  /* this affects the margin in the printer settings */
+}
+
+html
+{
+    background-color: #FFFFFF; 
+    margin: 0px;  /* this affects the margin on the html before sending to printer */
+}
+
+body
+{
+    border: none;
+    margin: 15mm 5mm;  /* margin you want for the content */
+}
+/* 1st page div class */
+.m-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width:100%;
+    /* width: 3508px;
+    height: 2480px ; */
+    position: absolute;
+    z-index: 1;
+    background-color: #ffffff;
+    -webkit-user-select: none;
+}
+.para{
+    width:720px;
+    
+}
+.onet{
+    width:720px;
+}
+.table1{
+    display:flex;
+    flex-direction: column;
+}
+.selection{
+    width:inherit;
+    height:100px;
+}
+table {
+    border-collapse: collapse;
+
+}
+td{
+    border:1px solid black;
+    padding: 5px;
+}
+.t-heading{
+    background-color:lightgrey;
+    font-weight: bold;
+}
+li strong {
+    margin:  100px 0px;
+}
+.add{
+    border-radius: 5px;
+    margin: auto 10px;
+    padding:10px;
+    border: none;
+    background: rgb(197, 23, 23);
+    color:white;
+}
+.cancel{
+    border-radius: 5px;
+    margin: auto 10px;
+    padding:10px;
+    border: none;
+    background:rgb(23, 151, 23);
+    color:white;
+}
+.inp-section{
+    margin: 20px 0px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    box-shadow: 0px 0px 2px 0px grey;
+
+}
+
+
+.selection{
+    padding:10px;
+    display:flex;
+    border: 1px solid lightblue;
+    border-radius: 5px;
+    border-style: groove;
+    flex-wrap: wrap;
+    margin: 20px 0px;
+}
+
+.lentry{
+    margin-top: 30px;
+}
+
+.sp-card{
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding:5px;
+    margin:10px ;
+    height:fit-content;
+    box-shadow: 0px 0px 1px 0px grey inset;
+}
+.sp-card:hover{
+    /* background-color:rgb(173, 60, 60); */
+    background-image: url(../close.svg);
+    transition: all 0.2s ease-in-out;
+    background-position: right;
+    background-repeat:no-repeat;
+    background-size: 20px;
+    cursor:pointer;
+    padding-right: 20px;
+}

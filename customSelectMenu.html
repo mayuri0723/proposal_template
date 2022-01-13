@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .tag{
+            display:block;
+            border: 1px solid lightgrey;
+            border-radius: 2px;
+            margin:0px 5px;
+            padding:0px 5px;
+        }
+        .tag label:hover{
+            text-decoration: red;
+            cursor: not-allowed;
+        }
+        .display{
+            display:inline-flex;
+        }
+        .simple-btn{
+            border: 1px solid grey;
+            border-radius: 2px;
+            padding:0px;
+            cursor: pointer;
+            box-shadow: 0px 0px 1px 0px grey inset;
+        }
+        .inp{
+            padding:2px;
+        }
+        select{
+            margin: auto;
+            padding:0px;
+        }
+        .input-section-1{
+            margin:auto;
+            display:inline-block;
+        }
+        #selectMenu{
+            display:inline-flex;flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        
+        <div id="selectMenu" multiple="true">
+            <div class="display" id="display" ></div>
+            <select name="" id="select" onchange="selection('select', 'customEntry', 'aPart[]', 'display', 'input')">
+                <option value="-">select</option>
+                <option value="a"> option a</option>
+                <option value="d"> option D</option>
+                <option value="add">Custom Entry</option>
+            </select>
+            <div class="input-section-1" id="input" style="display: none;">
+                <input type="text" name="" id="customEntry" class="inp" placeholder="custom entry" >
+                <label for="" onclick="add('', 'select',  'customEntry', 'aPart', 'display',  'input')" class="simple-btn">add</label>
+                <label for="" onclick="cancel()" class="simple-btn">cancel</label>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+        var count=0;
+        function selection(selectId, inputBox, nm, displayId, inpSection){
+            var val=document.getElementById(selectId).value;
+            if(val=="add"){
+                document.getElementById(inpSection).style.display="inline-block";
+                document.getElementById(selectId).style.display="none";
+            }else{
+                add(val, displayId, nm, inputBox, selectId, inpSection);
+            }
+            document.getElementById(selectId).options[0].selected=true;
+
+       }
+
+       function cancel(){
+        document.getElementById("input").style.display="none";
+        document.getElementById("select").style.display="";
+       }
+       
+       function add(value,  selectId, inputBox,  nm, displayId, inpSection){
+            var display=document.getElementById(displayId);
+            var val="";
+            if (value==''){
+                val=document.getElementById(inputBox).value;
+            }else{
+                val=value;
+            }
+            var span=document.createElement("span");
+            span.setAttribute("id", count);
+            span.setAttribute("onclick", "remove("+count+", '"+selectId+"', '"+inpSection+"' )");
+            span.setAttribute("class", "tag")
+            count++;
+          
+            var inputHidden=document.createElement("input");
+            inputHidden.setAttribute("type", "hidden");
+            inputHidden.setAttribute("name", nm);
+            inputHidden.setAttribute("value", val);
+
+            span.append(inputHidden);
+            
+            var label=document.createElement("label");
+            label.textContent=val;
+
+            span.append(label);
+            display.append(span);
+            
+            if(document.getElementById("selectMenu").getAttribute("multiple")=='false'){
+                document.getElementById(selectId).style.display="none";
+                document.getElementById(inpSection).style.display="none";
+            }
+
+       }
+
+       function remove(id, selectId, inpSection){
+            document.getElementById(id).remove();
+            if(document.getElementById("selectMenu").getAttribute("multiple")=='false'){
+                document.getElementById(selectId).style.display="";
+                document.getElementById(inpSection).style.display="none";
+            }
+       }
+
+
+    </script>
+    
+</body>
+</html>
