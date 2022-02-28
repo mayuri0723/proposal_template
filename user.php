@@ -24,7 +24,7 @@
                *  LOGIN QUERY
                */
               
-              $query    = "SELECT * FROM `users` WHERE username= ? AND password = ? ";
+              $query    = "SELECT id FROM `users` WHERE username= ? AND password = ? ";
               $stmt=mysqli_prepare($conn, $query);
               
               mysqli_stmt_bind_param($stmt, 'ss', $username, $password);
@@ -32,7 +32,8 @@
               $result=mysqli_stmt_get_result($stmt);
               if($row=mysqli_fetch_assoc($result)){
                 $_SESSION['username'] = $username;
-                header("Location: index.php");
+                $_SESSION['user_id'] = $row['id'];
+                header("Location: dashboard.php");
                 exit();
               }else{
                 /**
@@ -101,7 +102,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" 
     crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/" integrity="sha384-
@@ -113,7 +114,7 @@
 </head>
 <body>
 
- 
+
 
 <section>
       <div class="container">

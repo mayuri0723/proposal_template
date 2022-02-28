@@ -1,75 +1,6 @@
-/* *{
-    margin: 1px;
-    padding: 0;
-}
-
-
-.container{
-    display:flex;
-    flex-direction: column;
-    width:100%;
-    align-self: center;
-}
-image class
-.png{
- height: auto;
- width:720px;
- align-self: center;
-}
-
-.png2{
-    margin-top: 50px;
-    margin-left: 31%; 
-    align-self: flex-start;
-}
- @page 
-    {
-        size: auto;   auto is the initial value  */
-        /* margin: 0mm;  this affects the margin in the printer settings
-    } 
-1st page div class
-.m-container{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width:100%;
-    /* width: 3508px;
-    height: 2480px ; */
-    /* position: absolute;
-    z-index: 1;
-    background-color: #ffffff;
-    -webkit-user-select: none;
-}
-.para{
-    width:720px;
-    
-}
-.onet{
-    width:720px;
-} */
-/* .table1{
-
-} */
-/* table {
-    border-collapse: collapse;
-
-}
-td{
-    border:1px solid black;
-    padding: 5px;
-}
-.t-heading{
-    background-color:lightgrey;
-    font-weight: bold;
-}
-li strong {
-    margin:  100px 0px;
-} */
 *{
-    /* margin: 1px; */
-    padding: 0;
+    font-size: 13pt;
 }
-
 
 .container{
     display:flex;
@@ -79,9 +10,10 @@ li strong {
 }
 /* image class */
 .png{
- height: auto;
- width:720px;
- align-self: center;
+    width: 710px;
+    align-self: center;
+    height: 837px;
+
 }
 
 .png2{
@@ -184,11 +116,11 @@ li strong {
 
 .selection{
     padding:10px;
-    display:flex;
     border: 1px solid lightblue;
     border-radius: 5px;
     border-style: groove;
     flex-wrap: wrap;
+    overflow: auto;
     margin: 20px 0px;
 }
 

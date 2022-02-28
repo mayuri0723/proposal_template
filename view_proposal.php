@@ -6,83 +6,91 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <title>Document</title> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/" integrity="sha384-
-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" 
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
+ <style>
+      @media print {
+        .btn{
+            display:none;
+        } 
+
+    }
+    table { page-break-after:auto }
+    tr { page-break-inside:avoid; page-break-after:auto }
+    td { page-break-inside:avoid; page-break-after:auto }
+    thead { display:table-header-group }
+    tfoot { display:table-footer-group } 
+
+    @page{
+        /* size: 210mm 297mm; */
+        /* margin: 27mm 16mm 27mm 16mm; */
+    }
+    .class { 
+	font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif; 
+}
+
+     </style>
 </head>
 
 <body>
+<?php if(isset($_GET['done']))
+ echo "<script> alert('Updated Successfully')</script>";
+ ?>
     <div class="container">
-        <img class="png" src="img/1.png">
+        <img class="png" src="img/1.png" >
     </div>
     <div class="pg2">
         <!-- <img  class="png2" src="img/2.png"> -->
     </div>
     <?php 
     session_start();
-    if ($_SERVER["REQUEST_METHOD"]=="POST"){
-            $subject=$_POST['subject'];
-            $maxProposalId=$_POST['proposal_number'];
-            $revision_number=$_POST['revision_number'];
-            $salutation_s=$_POST['salutation'];
-            $curr =$_POST['curr'];
-            $local=$_POST['local'];
-            $tableA=$_POST['aPart'];
-            $tableB=array();
-            if(isset($_POST['bPart']))
-            {
-                $tableB=$_POST['bPart'];
-            }
-            if(isset($_POST['workDescription']))
-            {
-                $workDescription=$_POST['workDescription'];
-                $unit=$_POST['unit'];
-                $price=$_POST['price'];
-            }
+    if ($_SERVER["REQUEST_METHOD"]=="GET"){
            
-            
-            
-            $stay_expenses=$_POST["stay_expenses"];
-            $travels_expenses=$_POST["travels_expenses"];
-            $siso_expenses=$_POST["siso_expenses"];
-            $price_e=$_POST['price_e'];
-            $price_f=$_POST['price_f'];
-            $price_g=$_POST['price_g'];
-            $price_h=$_POST['price_h'];
-            $days=$_POST['days'];
-            $area_of_p=$_POST['area_of_p'];
-            $point_a=$_POST['point_a'];
-            $point_b=$_POST['point_b'];
+        $proposal_number = $_GET["id"];
         require("db.php");
 
 
-        $query= "INSERT INTO proposal (`subject`,`proposal_number` , `revision_number` , `salutation` , `curr`,`local`,`price_e`,`price_f`,`price_g`,`price_h`, `days`, `user_id`, `siso_expenses`, `travel_expenses`, `stay_expenses`,`area_of_p`,`point_a`,`point_b`) VALUE(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $query= "SELECT * FROM proposal where proposal_number= ".$proposal_number;
 
        // $stmt=mysqli_prepare($conn, $query);
        
-        $stmt=$conn->prepare($query);
+        $result=$conn->query($query);
         mysqli_error($conn);
-        $stmt->bind_param("siisssddddiidddddd",$subject,$maxProposalId,$revision_number,$salutation_s,$curr, $local, $price_e,$price_f,$price_g,$price_h,$days, $_SESSION['user_id'], $siso_expenses, $travels_expenses, $stay_expenses,$area_of_p,$point_a,$point_b);
-        if($stmt){
+        $row= $result->fetch_assoc();
+        if($row){
      
-            $stmt->execute();
+           
             echo mysqli_error($conn);
-            $tableaEntryQuery="INSERT INTO tablea (`proposal_id`, `aPart`) VALUE(?,?)";
-            $tablebEntryQuery="INSERT INTO tableb (`proposal_id`,`bPart`) VALUE(?,?)";
-            $stmtTableaEntry=$conn->prepare($tableaEntryQuery);
-            $stmtTablebEntry=$conn->prepare($tablebEntryQuery);
-            $aPartText="";
-            $bPartText="";
-            $stmtTableaEntry->bind_param("is", $maxProposalId,$aPartText);
-            $stmtTablebEntry->bind_param("is", $maxProposalId,$bPartText);
-            foreach($tableA as $key=>$value){
-                $aPartText=$value;
-                $stmtTableaEntry->execute();
-            }
-            foreach($tableB as $key=>$value){
-                $bPartText=$value;
-                $stmtTablebEntry->execute();
-            }
+            $subject=$row['subject'];
+            $proposal_number=$row['proposal_number'];
+            $revision_number=$row['revision_number'];
+            $salutation_s=$row['salutation'];
+            $curr =$row['curr'];
+            $local=$row['local'];
+            $stay_expenses=$row["stay_expenses"];
+            $travel_expenses=$row["travel_expenses"];
+            $siso_expenses=$row["siso_expenses"];
+            $price_e=$row['price_e'];
+            $price_f=$row['price_f'];
+            $price_g=$row['price_g'];
+            $price_h=$row['price_h'];
+            $days=$row['days'];
+            $area_of_p=$row['area_of_p'];
+            $point_a=$row['point_a'];
+            $point_b=$row['point_b'];
+
+            $total =  $point_a +  $point_b;
+
         }else{
             echo"serious problem";
         }
@@ -91,21 +99,22 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
        // $stmt->close();
 
         ?>
-    <div class="m-container">
+       
+    <div class="m-container" style="font-size: 13pt;">
         <div style="width:722px;">
             <img class="png2" src="img/2.png">
         </div>
         <img src="" alt="">
         <div class="para">
             <h1>Proposal for Structural Engineering Design Services</h1>
-            <h2><strong>Subject:</strong>
+            <h2><strong style="font-family:">Subject:</strong>
                 <strong style="color: cornflowerblue;">
                     <?php echo $subject; ?>
                 </strong>
             </h2>
             <span style="display:flex; width: 100%;justify-content: space-between;">
                 <h2>Proposal No :2022-
-                    <?php  echo $maxProposalId; ?>
+                    <?php  echo $proposal_number; ?>
                 </h2>
                 <h2>Revision :
                     <?php echo $revision_number; ?>
@@ -128,7 +137,7 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
         <ol class="onet" start="1">
             <li><strong>Scope of Work & Deliverables Includes:</strong>
                 <div>
-                    <table style="width:70%">
+                    <table style="width:70%; page-break-after:auto;">
                         <tr class="t-heading">
                             <td>
                                 <strong> 1A </strong>
@@ -136,12 +145,13 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                             </td>
                         </tr>
                         <?php
-
-                        foreach($tableA as $key=>$value){
+                        $tableaQuery = "SELECT * FROM tablea where proposal_id = ".$proposal_number;
+                        $result=$conn->query($tableaQuery);
+                        while($row =  $result->fetch_assoc()){
                             ?>
                         <tr>
                             <td>
-                                <?php  echo $value; ?>
+                                <?php  echo $row['aPart']; ?>
                             </td>
                         </tr>
                         <?php
@@ -153,14 +163,19 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
             <br>
             <br>
             <br>
-            <li>
-                <div>
-                  <?php
-                    if(isset($_POST['bPart']))
-                    {
-                        ?>
+            <?php
+            $tablebQuery="SELECT * FROM tableb where proposal_id = ".$proposal_number;
+                $result=$conn->query($tablebQuery);
+                if(mysqli_num_rows($result) >0)
+                {
+                    
+            
+            ?>
+                <li>
+                    <div>
+                 
                         <strong>Scope of Work & Deliverables Includes:</strong>
-                              <table style="width:70%">
+                              <table style="width:70%;">
                                 <tr class="t-heading">
                                     <td>
                                         <strong> 1B</strong>
@@ -169,24 +184,24 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                                 </tr>
                                 <?php
 
-                                foreach($tableB as $key=>$value){
+                                while($row= $result->fetch_assoc()){
                                 ?>
                                 <tr>
                                     <td>
-                                        <?php  echo $value; ?>
+                                        <?php  echo $row["bPart"]; ?>
                                     </td>
                                 </tr>
                                 <?php
                                 }
                                 ?>
                             </table>
-                        <?php
-                    }
-                        
-                  
-                  ?>
-                </div>
-            </li>
+                   
+                    </div>
+                </li>
+            <?php
+                }
+                              
+            ?>
             <br>
             <br>
             <br>
@@ -210,24 +225,27 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                         $count=1;
                         $temp=1;
                         $i=0;
-                        if(isset($_POST['workDescription']))
+                        $feeBreakdownQuery="SELECT * FROM fee_break_down WHERE proposal_id = ".$proposal_number;
+                        $result= $conn->query($feeBreakdownQuery);
+
+                        if($result)
                         {
-                            for($i=0;$i<count($price); $i++)
+                            while($row = $result->fetch_assoc())
                             {                        
-                                $multiInsertFeeBreakDown.="INSERT INTO fee_break_down (`proposal_id`, `description_of_work`, `unit`, `rate`) VALUES( ".$maxProposalId.", '".$workDescription[$i]."', '".$unit[$i]."', '".$price[$i]."' );";
+                               
                                 ?>
                                     <tr>
                                         <td>
                                             <?php echo $count ; ?>
                                         </td>
                                         <td>
-                                            <?php echo $workDescription[$i]; ?>
+                                            <?php echo $row['description_of_work'] ?>
                                         </td>
                                         <td>
-                                            <?php echo $unit[$i]; ?>
+                                            <?php echo $row['unit']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $price[$i]; ?>
+                                            <?php echo $row['rate']; ?>
                                         </td>
                                     </tr>
                                 <?php
@@ -235,7 +253,7 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
     
                             }
                             
-                            $conn->multi_query($multiInsertFeeBreakDown);
+                           
                         }
                     ?>
 
@@ -250,7 +268,7 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                         <td><?php echo $count.".".$temp ; ?></td>
                         <td>Air Tickets and oter travel expenses  </td>
                         <td> </td>
-                        <td><?php echo $travels_expenses; ?></td>
+                        <td><?php echo $travel_expenses; ?></td>
                     </tr>
                     
                     <tr>
@@ -352,9 +370,9 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                 <strong> Cost proposed and Timelines</strong>
                 <table>
                     <tr>
-                        <!-- area of project -->
+                        <!-- Area of Project -->
                         <td class="t-heading">Area of Project Work</td>
-                        <td> <?php  echo $area_of_p; ?></td>
+                        <td> <?php echo $area_of_p; ?></td>
                     </tr>
                     <tr>
                         <td class="t-heading">
@@ -368,25 +386,24 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                         <td class="t-heading">Proposed Cost (
                             <?php  echo $curr; ?>)
                         </td>
-                        <td style="padding:0px">
-                            <table style="width:100%">
+                        <td style="padding:0px;">
+                            <table style="width:100%;">
                                 <tr>
                                     <td class="t-heading">Scope of Work</td>
                                     <td class="t-heading">Amount</td>
                                 </tr>
-                                <tr>
-                                    <!-- see pointA -->
+                                <tr><!-- see pointA -->
                                     <td>As per Point 1A</td>
-                                    <td> <?php echo $point_a;?></td>
+                                    <td><?php echo $point_a; ?></td>
                                 </tr>
                                 <tr>
                                     <!-- see pointB -->
                                     <td>As per Point 1B</td>
-                                    <td> <?php  echo  $point_b;?></td>
+                                    <td><?php echo $point_b; ?></td>
                                 </tr>
                                 <tr>
                                     <td class="t-heading">Total</td>
-                                    <td>-</td>
+                                    <td><?php echo $total;?></td>
                                 </tr>
                             </table>
                         </td>
@@ -416,11 +433,12 @@ BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="a
                 </ol>
             </li>
         </ol>
-        <img class="png3" src="img/3.png">
-
-    </div>
-
-
+        <img class="png3" src="img/footer.png" style="margin:150px; page-break-inside:avoid; page-break-before:always;">
+        <img class="png3" src="img/map.png">
+       
+        <a  href="update_template.php?id=<?php echo $proposal_number;?>" type="button" class="btn btn-outline-secondary">Edit</a>
+    
+      
+    </div>  
 </body>
-
 </html>
