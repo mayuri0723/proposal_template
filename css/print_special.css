@@ -1,0 +1,66 @@
+
+ @font-face {
+    font-family: calibri;
+    src: url("./fonts/Calibri Regular.ttf");
+}
+ *{
+       text-align:justify;
+       font-size:13pt;
+       font-family:calibri;
+   }
+ @media print {
+   .btn{
+       display:none;
+   } 
+   .para{
+       width:90%;
+   }
+  .onet{
+      width:90%;
+  }
+  li{
+      width:100%;
+  }
+  .png{
+      height:1000px;
+      width:100%;
+  }
+  .png3{
+      width:100%;
+  }
+   .m-container{
+       display:block;
+       margin:0;
+   }
+   .container{
+       display:block;
+       margin:0;
+   }
+ 
+  
+   p{
+       width:100%;
+   }
+   ol{
+       display:block;
+       width:100%;
+   }
+   .png3{
+       width:100%;
+   }
+   table { page-break-after:auto; }
+   tr { page-break-inside:avoid; page-break-after:auto; }
+   td { page-break-inside:avoid; page-break-after:auto; }
+   thead { display:table-header-group; }
+   tfoot { display:table-footer-group ;} 
+   li{
+       page-break-before:always;
+   }
+ 
+}
+
+
+@page{
+   /* size: 210mm 297mm; */
+   /* margin: 27mm 16mm 27mm 16mm; */
+}
