@@ -182,10 +182,10 @@
         </div>
       </div>
     </section>
-    <script>
+       <script>
               function toggleForm() {
-        var container = document.querySelector(".container");
-        container.classList.toggle("active");
+              var container = document.querySelector(".container");
+              container.classList.toggle("active");
                }
         </script>
 </body>
