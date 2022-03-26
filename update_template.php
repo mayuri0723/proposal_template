@@ -54,7 +54,13 @@
             margin: auto;
             padding: 0px;
         }
-
+        .images{
+            display: flex;
+            flex-direction: column;
+        }
+        .p-image{
+            display: flex;
+        }
         .input-section-1 {
             margin: auto;
             display: inline-block;
@@ -629,37 +635,89 @@
                     }
                 }
             </script>
+             <div class="images" id = "proposal_images">
+                <label onclick="addImage()" for="">add image</label>
+
+                <?php 
+                require("db.php");
+                $query ="SELECT id, proposal_id, image_name FROM proposal_image WHERE proposal_id = ?";
+
+                $stmt = $conn->prepare($query);
+              
+                $stmt->bind_param("i", $proposal_number);
+
+                $stmt->execute();
+                $result = $stmt->get_result();
+                echo mysqli_error($conn);
+                while($row = $result->fetch_assoc())
+                {
+                    ?>
+                        <span id="img<?php echo $row['id']; ?>">
+                            <img width="200" height="150" src="uploads/<?php echo $row['image_name']?>" alt="no image">
+                            <input type="hidden" name="prev_image_id[]" value="<?php echo"";?>">
+                            <label for="" onclick = "removeImage('img<?php echo $row['id'] ;?>')" >remove</label>
+                        </span>
+                    <?php
+                }
+            ?>
+
+
+            </div>
+            <script>
+                let imgInp = document.getElementById();
+                imgInp.onchange = evt => {
+                    const [file] = imgInp.files
+                    if (file) {
+                        blah.src = URL.createObjectURL(file)
+                    }
+                }
+                var imgCount = 10000;
+                function addImage()
+                {
+                    let imgCode = "img";
+                    imgCount++;
+                    let imgId= imgCode+imgCount;
+                    let span = document.createElement("span");
+                    span.id = imgId;
+                    span.setAttribute("class", "p-image");
+
+                    let img = document.createElement("input");
+                    img.type="file";
+                    img.name = "p_image[]";
+
+                    let imgFile = document.createElement('img');
+                    
+                    imgFile..onchange = evt => {
+                        const [file] = imgFile.files
+                        if (file) {
+                            blah.src = URL.createObjectURL(file)
+                        }
+                    }
+
+                    span.append(img);
+
+                    let label = document.createElement("label");
+                    label.setAttribute("onclick", "removeImage('"+imgId+"')");
+                    label.textContent ="remove";
+
+                    span.appendChild(label);
+
+
+                    let labelCount = document.createElement("label");
+                    labelCount.textContent =imgCount;
+                    span.appendChild(labelCount);
+
+                    let p_images = document.getElementById("proposal_images");
+                    p_images.append(span);
+
+                }
+
+                function removeImage(id){
+                    document.getElementById("proposal_images").removeChild(document.getElementById(id));
+                }
+            </script>
             <img class="png3" src="img/3.png">
-            <!-- <img src="./foot_image.PNG" alt=""> -->
-            <!-- <section>
-                <h1>
-                    For more information,<br>
-                    get in touch with our team.
-                </h1>
-            </section>
-            <section>
-                <div class="part-1">
-                    <h1>SteelSoft Consulting Services LLP</h1>
-                    <h2>Block 3, Vihaan <br>
-                        Pimple Nilakh, Pune-411007
-                    </h2>
-                    <h2>
-                        <a href="">+918530191192</a><br>
-                        <a href="">info@steelsoft-global.in</a><br>
-                        <a href="">www.steelsoft-global.in</a><br>
-                    </h2>
-                </div>
-                <div class="part-2">
-                    <img src="" alt="">
-                    <h1>Steel Soft</h1>
-                    <hr>
-                    Design Engineering Innovation
-                </div>
-            </section>
-            <section>
-                <h2>Our Structural Design Presence Globally</h2>
-                <img src="./map.PNG" alt="">
-            </section> -->
+            
             <input type="submit" value="submit">
         </form>
     <?php

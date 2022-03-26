@@ -73,7 +73,7 @@
     <div class="pg2">
         <!-- <img  class="png2" src="img/2.png"> -->
     </div>
-    <form class="m-container" method="POST" action="template.php">
+    <form class="m-container" method="POST" action="template.php" enctype="multipart/form-data">
         <div style="width:722px;">
             <img class="png2" src="img/2.png">
         </div>
@@ -501,39 +501,11 @@
                 }
             }
         </script>
+
+         
         <img class="png3" src="img/3.png">
-        <!-- <img src="./foot_image.PNG" alt=""> -->
-        <!-- <section>
-            <h1>
-                For more information,<br>
-                get in touch with our team.
-            </h1>
-        </section>
-        <section>
-            <div class="part-1">
-                <h1>SteelSoft Consulting Services LLP</h1>
-                <h2>Block 3, Vihaan <br>
-                    Pimple Nilakh, Pune-411007
-                </h2>
-                <h2>
-                    <a href="">+918530191192</a><br>
-                    <a href="">info@steelsoft-global.in</a><br>
-                    <a href="">www.steelsoft-global.in</a><br>
-                </h2>
-            </div>
-            <div class="part-2">
-                <img src="" alt="">
-                <h1>Steel Soft</h1>
-                <hr>
-                Design Engineering Innovation
-            </div>
-        </section>
-        <section>
-            <h2>Our Structural Design Presence Globally</h2>
-            <img src="./map.PNG" alt="">
-        </section> -->
         <input type="submit" value="submit">
-    </form>
+    
 
 
 </body>

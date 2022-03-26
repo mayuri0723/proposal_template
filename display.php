@@ -28,18 +28,7 @@
 </head>
 
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "test";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
+require "db.php";
 $sql = "SELECT p.subject as subject ,p.proposal_number as proposal_number,p.revision_number as revision_number,u.username  as username FROM proposal p ,users u where p.user_id=u.id";
 $result = $conn->query($sql);
 
@@ -77,6 +66,7 @@ echo mysqli_error($conn);
 							  <?php echo $row["username"]; ?>
 						   </p>
 						</p>
+						
 						<a  class="col-sm-6 my-2"  href="view_proposal.php?id=<?php echo $row["proposal_number"];?>" style="text-decoration:none;">
 						      <img src="img/edit.png" alt="" style="width: 27px;">
 						</a>
