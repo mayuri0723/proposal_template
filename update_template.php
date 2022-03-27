@@ -6,15 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update</title>
-    <script src="https://kit.fontawesome.com/143173e95a.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/143173e95a.js" crossorigin="anonymous"></script>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="css/style.css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="css/print_special.css">
+    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script> -->
+
     <style>
+       
         .tag {
             display: block;
             border: 1px solid lightgrey;
@@ -84,7 +86,7 @@
         if($_SERVER['REQUEST_METHOD']=="GET" && isset($_GET['id']))
         {
     ?>
-        <form class="m-container" method="POST" action="process_template_update.php">
+        <form class="m-container" method="POST" action="process_template_update.php" enctype="multipart/form-data">
             <div style="width:722px;">
                 <img class="png2" src="img/2.png">
             </div>
@@ -640,7 +642,7 @@
 
                 <?php 
                 require("db.php");
-                $query ="SELECT id, proposal_id, image_name FROM proposal_image WHERE proposal_id = ?";
+                $query ="SELECT id, proposal_id, title,file_name FROM images WHERE proposal_id = ?";
 
                 $stmt = $conn->prepare($query);
               
@@ -648,13 +650,17 @@
 
                 $stmt->execute();
                 $result = $stmt->get_result();
+
                 echo mysqli_error($conn);
                 while($row = $result->fetch_assoc())
                 {
                     ?>
                         <span id="img<?php echo $row['id']; ?>">
-                            <img width="200" height="150" src="uploads/<?php echo $row['image_name']?>" alt="no image">
-                            <input type="hidden" name="prev_image_id[]" value="<?php echo"";?>">
+
+                            <img class='display-img' src="uploads/<?php echo $row['file_name']?>" alt="no image">
+                            <label for=""><?php echo $row['title']; ?></label>
+                            <input type="hidden" name="file_name[]" value="uploads/<?php echo $row['file_name'];?>">
+                            <input type="hidden" name="prev_image_id[]" value="<?php echo $row['id'];?>">
                             <label for="" onclick = "removeImage('img<?php echo $row['id'] ;?>')" >remove</label>
                         </span>
                     <?php
@@ -664,13 +670,6 @@
 
             </div>
             <script>
-                let imgInp = document.getElementById();
-                imgInp.onchange = evt => {
-                    const [file] = imgInp.files
-                    if (file) {
-                        blah.src = URL.createObjectURL(file)
-                    }
-                }
                 var imgCount = 10000;
                 function addImage()
                 {
@@ -683,18 +682,25 @@
 
                     let img = document.createElement("input");
                     img.type="file";
-                    img.name = "p_image[]";
+                    img.name = "file[]";
 
                     let imgFile = document.createElement('img');
+                    imgFile.setAttribute('class','display-img');
                     
-                    imgFile..onchange = evt => {
-                        const [file] = imgFile.files
+                    let titleInput= document.createElement('input');
+                    titleInput.setAttribute('type', 'text');
+                    titleInput.setAttribute('name', 'title[]');
+
+                    img.onchange = evt => {
+                        const [file] = img.files
                         if (file) {
-                            blah.src = URL.createObjectURL(file)
+                            imgFile.src = URL.createObjectURL(file)
                         }
                     }
 
+                    span.append(imgFile);
                     span.append(img);
+                    span.append(titleInput);
 
                     let label = document.createElement("label");
                     label.setAttribute("onclick", "removeImage('"+imgId+"')");
@@ -716,7 +722,7 @@
                     document.getElementById("proposal_images").removeChild(document.getElementById(id));
                 }
             </script>
-            <img class="png3" src="img/3.png">
+             <img class="png3" src="img/footer.png" style="margin-top:20px;">
             
             <input type="submit" value="submit">
         </form>

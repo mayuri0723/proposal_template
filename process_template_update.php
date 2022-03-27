@@ -1,5 +1,41 @@
 <?php
-     session_start();
+
+    function add_image_to_proposal($file_name, $proposal_id, $title)
+    {
+        require "db.php";
+
+        $flag = TRUE;
+        try
+        {
+            $query = "INSERT INTO images (proposal_id, file_name, title) VALUES(?,?,?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("iss", $proposal_id, $file_name, $title);
+            $stmt->execute();
+            $conn->close();
+        }   
+        catch(Exception $e)
+        {
+            $flag=FALSE;
+            print_r($e);
+        }
+        return $flag;
+    }  
+
+    function reArrayFiles(&$file_post) {
+        print_r($file_post);
+        $file_ary = array();
+        $file_count = count($file_post['name']);
+        $file_keys = array_keys($file_post);
+
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                $file_ary[$i][$key] = $file_post[$key][$i];
+            }
+        }
+
+        return $file_ary;
+    }
+    session_start();
     if ($_SERVER["REQUEST_METHOD"]=="POST")
     {
 
@@ -18,7 +54,33 @@
         $stay_expenses=$_POST['stay_expenses'];
         $siso_expenses=$_POST["siso_expenses"];
 
+        $title = array();
+        if(isset($_POST['title']))
+        {
+            $title=$_POST['title'];
+        }
+
+        $file_names = array();
+        if(isset($_POST['file_name']))
+        {
+            $file_names=$_POST['file_name'];
+        }
+
+        $prev_image_id = array();
+        if(isset($_POST['prev_image_id']))
+        {
+            $prev_image_id=$_POST['prev_image_id'];
+        }
         
+        $files = array();
+        if(isset($_FILES['file']))
+        {
+            echo "okay ";
+            $files = $_FILES['file'];
+            $files = reArrayFiles($files);            
+        }
+        
+
         
         $tableAnew = array();
         if(isset($_POST['aPart'])){
@@ -94,6 +156,9 @@
 
 
 
+/**
+ *  Handling tableA and tableB 
+ */
 
             /**
              * Getting all the ids from tablea which has a reference to this proposal id
@@ -165,6 +230,7 @@
                 $aPartText=$value;
                 $stmtTableaEntry->execute();
             }
+
             foreach($tableBnew as $key=>$value)
             {
                 $bPartText=$value;
@@ -188,7 +254,9 @@
 
 
 
-
+/**
+ * Handling fee_break_down
+ */
 
 
 
@@ -238,11 +306,104 @@
             $transactions=$tablefdelete."".$tablefInsert."". $tablefUpdate;
             $conn->multi_query($transactions);
             echo  mysqli_error($conn);
+            
+            $conn->close();
 
+            require "db.php";
+/** 
+ * Handiling images
+ */
 
+            // deleting images removed by user
+            $query_prev_images = "SELECT id, file_name FROM images WHERE proposal_id = ".$proposal_number;
 
+            $result_prev_images_id = $conn->query($query_prev_images);
+            $delete_query_img="";
+            $deletable_file_names= array();
+            echo mysqli_error($conn);
+            if(mysqli_num_rows($result_prev_images_id) >0)
+            {
+                while($row=$result_prev_images_id->fetch_assoc())
+                {
+                    if(in_array($row['id'], $prev_image_id))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        $delete_query_img.="DELETE FROM images WHERE id = ".$row['id'].";";
+                        $deletable_file_names[] = "uploads/".$row['file_name'];
+                    }
+                }
+            }
+            echo $delete_query_img."<br>";
+            // code for unlinking the files and deleting entry from database
+            $conn->multi_query($delete_query_img);
+            foreach($deletable_file_names as $filename)
+            {
+                unlink($filename);
+                echo $filename."<br>";
+            }
+            $image_insert_query="";
+            // adding images newly added by user
+            
+            
+            $k=0;
+            $allowed =array("jpg", "jpeg", "png");
+            foreach($files as $image)
+            {
+                $file_name = $image['name'];
+                $file_temp_name = $image['tmp_name'];
+                $dile_size = $image['size'];
+                $file_error= $image['error'];
+                $file_size = $image['size'];
+        
+               
+                $file_ext = explode('.', $file_name);
+                $file_actual_ext = strtolower(end($file_ext));
+                
+                if(in_array($file_actual_ext, $allowed))
+                {
+                    if($file_error == 0)
+                    {
+                        if($file_size < 2000000)
+                        {
+                            $file_new_name = uniqid('', true).'.'.$file_actual_ext;
+                            $file_desitination ="uploads/".$file_new_name;
+                            
+                            echo "Preparing to insert file name in database";
+                            $temp = add_image_to_proposal($file_new_name, $proposal_number, $title[$k]);
+                            if(!$temp)
+                            {
+                                echo"[*] Although your file might have been uploaded to server but ther was an error while recording the same in databse. <br>";
+                            }
+                            move_uploaded_file($file_temp_name, $file_desitination);
+                            
+                        }
+                        else
+                        {
+                            echo"[*] File size cannot be more than 20 mb.<br>";
+                        }
+                    }
+                    else
+                    {
+                        echo "[*] There is an error while verifying file. <br>";
+                        break;
+                    }
 
-
+                }
+                else
+                {
+                    echo"[*] One of the file is not an image.<br>";
+                    break;
+                }
+                $k++;
+            }
+        
+            if($k == count($files))
+            {
+                echo "<script> alert('File upload was success.'); <script>";
+            }
          }
          else{
              echo mysqli_error($conn);
@@ -251,6 +412,7 @@
         
      }
         // $stmt->close();
- header("location: view_proposal.php?id=".$proposal_number."&done=1");
-         
+ //header("location: view_proposal.php?id=".$proposal_number."&done=1");
+   
+ 
 ?>

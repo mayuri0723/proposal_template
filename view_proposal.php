@@ -419,8 +419,36 @@
                 </ol>
             </li>
         </ol>
+        <div class="images" id = "proposal_images">
+            
+            <?php 
+            require("db.php");
+            $query ="SELECT id, proposal_id, title,file_name FROM images WHERE proposal_id = ?";
+
+            $stmt = $conn->prepare($query);
+            
+            $stmt->bind_param("i", $proposal_number);
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            echo mysqli_error($conn);
+            while($row = $result->fetch_assoc())
+            {
+                ?>
+                    <span id="img<?php echo $row['id']; ?>">
+
+                        <img class='display-img' src="uploads/<?php echo $row['file_name']?>" alt="no image">
+                        <label for="" style ='margin-bottom:30px;'><?php echo $row['title']; ?></label>
+                    </span>
+                <?php
+            }
+        ?>
+
+
+        </div>
       
-        <img class="png3" src="img/footer.png" style="margin-top:20px;">
+        <img class="png3" src="img/footer.png" style="margin-top:20px; height:650px;" >
         <img class="png3" src="img/map.png" style="height:300px;">
        
         <a  href="update_template.php?id=<?php echo $proposal_number;?>" type="button" class="btn btn-outline-secondary">Edit</a>

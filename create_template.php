@@ -12,6 +12,7 @@
    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print_special.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <style>
         .tag {
@@ -501,9 +502,66 @@
                 }
             }
         </script>
+        </script>
+             <div class="images" id = "proposal_images">
+                <label onclick="addImage()" for="">add image</label>   
 
+            </div>
+            <script>
+                var imgCount = 10000;
+                function addImage()
+                {
+                    let imgCode = "img";
+                    imgCount++;
+                    let imgId= imgCode+imgCount;
+                    let span = document.createElement("span");
+                    span.id = imgId;
+                    span.setAttribute("class", "p-image");
+
+                    let img = document.createElement("input");
+                    img.type="file";
+                    img.name = "file[]";
+
+                    let imgFile = document.createElement('img');
+                    imgFile.setAttribute('class','display-img');
+                    
+                    let titleInput= document.createElement('input');
+                    titleInput.setAttribute('type', 'text');
+                    titleInput.setAttribute('name', 'title[]');
+
+                    img.onchange = evt => {
+                        const [file] = img.files
+                        if (file) {
+                            imgFile.src = URL.createObjectURL(file)
+                        }
+                    }
+
+                    span.append(imgFile);
+                    span.append(img);
+                    span.append(titleInput);
+
+                    let label = document.createElement("label");
+                    label.setAttribute("onclick", "removeImage('"+imgId+"')");
+                    label.textContent ="remove";
+
+                    span.appendChild(label);
+
+
+                    let labelCount = document.createElement("label");
+                    labelCount.textContent =imgCount;
+                    span.appendChild(labelCount);
+
+                    let p_images = document.getElementById("proposal_images");
+                    p_images.append(span);
+
+                }
+
+                function removeImage(id){
+                    document.getElementById("proposal_images").removeChild(document.getElementById(id));
+                }
+            </script>
          
-        <img class="png3" src="img/3.png">
+        <img class="png3" src="img/footer.png">
         <input type="submit" value="submit">
     
 
